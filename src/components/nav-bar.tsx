@@ -17,7 +17,9 @@ export function NavBar(props:NavBarProps){
         bar:{
             width:"100%",
             display:"flex",
-            backgroundImage:"radial-gradient(grey, slategrey, black)",
+            borderColor:"antiquewhite",
+            borderWidth:"2px",
+            borderStyle:"solid",
             justifyContent:"space-between",
             alignItems:"center",
             borderRadius:"10px",
@@ -27,10 +29,10 @@ export function NavBar(props:NavBarProps){
 
     return<>
         <div style={{...myStyle.bar}}>
-            <div style={{marginLeft:"20px",  marginTop:"5px", marginBottom:"5px"}}>
+            <div style={{marginLeft:"15px",  marginTop:"5px", marginBottom:"5px",display:"flex"}}>
                 {props.left.map(b=><NavButton text={b.text} callback={b.callback}/>)}
             </div>
-            <div style={{marginRight:"20px",  marginTop:"5px", marginBottom:"5px"}}>
+            <div style={{marginRight:"15px",  marginTop:"5px", marginBottom:"5px",display:"flex"}}>
                 {props.right.map(b=><NavButton text={b.text} callback={b.callback}/>)}
             </div>
         </div>
@@ -51,20 +53,21 @@ export function NavButton(props:NavBarButton){
     const myStyle = {
         button:{
             display:"table-cell",
-            backgroundImage: isHover ? "radial-gradient(black, slategrey, grey, white)":"radial-gradient(white, grey, slategrey, black)",
-            textDecoration:"none",
+            backgroundImage: isHover ? "radial-gradient(black, slategrey, grey, white)":"radial-gradient(rgba(5, 5, 5, 0.2) 90%, rgba(205, 205, 205, 0.9) 10%)",
+            textShadow:"2px 2px 5px white",
             borderRadius:"10px",
-            padding:"5px"
+            padding:"5px",
+            
         }
     };
-
-    return <>
-            <a href="#0" style={{...myStyle.button, textAlign:"center", cursor:"pointer"}} 
+    
+    return <div style={{...myStyle.button, textAlign:"center", cursor:"pointer",marginLeft:"10px",marginRight:"10px"}}>
+            <a href="#0" style={{textDecoration:"none"}} 
                 onClick={()=>{props.callback()}}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
                 <h1 style={{marginTop:"2px",marginBottom:"2px"}}>{props.text}</h1>
             </a>
-        </>
+        </div>
 }

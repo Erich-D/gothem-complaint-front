@@ -16,9 +16,8 @@ export function Form(props:FormProps){
     const inputFields = ()=> {
         const fields = [];
         for(let key in inputDefs){
-            //console.log(key + " is a " + typeof(inputDefs[key]));
             fields.push(
-                <fieldset style={{width:"50%", display:"block",marginTop:"25px"}}>
+                <fieldset style={{width:"50%", display:"block",marginTop:"25px",textShadow:"2px 2px 5px white",fontSize:"32px",borderRadius:"10px"}}>
                     <legend >{key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^[a-z]/, c=>c.toLocaleUpperCase())}</legend>
                     {getInputs(inputDefs[key])}
                 </fieldset>
@@ -30,10 +29,14 @@ export function Form(props:FormProps){
     function getInputs(inputobject: any){
         const inputs = [];
         for(let key in inputobject){
-            //console.log(key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^[a-z]/, c=>c.toLocaleUpperCase()))
             inputs.push(<div style={{display:"flex", justifyContent:"center"}}>
                 <label style={{margin:"5px"}} htmlFor={key} >{key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^[a-z]/, c=>c.toLocaleUpperCase())}</label>
-                <input style={{margin:"5px",marginTop:"5px"}} id={key} key={key} value={form[key]} type={typeof(inputobject[key])} placeholder={inputobject[key]} onChange={e=>setForm({...form, [key]:e.target.value})}/>
+                <input style={{margin:"5px",marginTop:"5px",borderRadius:"10px"}} 
+                        size={40} id={key} key={key} 
+                        value={form[key]} 
+                        type={(key==="password") ? "password":(inputobject[key]==="date") ? "datetime-local":typeof(inputobject[key])} 
+                        placeholder={inputobject[key]} 
+                        onChange={e=>setForm({...form, [key]:e.target.value})}/>
                 </div>
             )
         }
@@ -45,7 +48,7 @@ export function Form(props:FormProps){
     return <>
         <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
             {newForm}
-            <button style={{width:"15%",marginTop:"5px"}} onClick={()=>{props.handler(form)}}>{props.buttonText}</button>
+            <button style={{width:"15%",marginTop:"5px",borderRadius:"10px",padding:"3px",backgroundColor:"transparent",borderColor:"white",textShadow:"2px 2px 5px white",fontSize:"18px"}} onClick={()=>{props.handler(form)}}>{props.buttonText}</button>
         </div>
         
         </>
