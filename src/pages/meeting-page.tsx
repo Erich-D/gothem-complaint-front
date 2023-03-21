@@ -37,7 +37,11 @@ export function MeetingPage(){
         } 
     });
     const meetingMutation = useMutation(updateMeeting, {
-        onSuccess: () => router("/meetings")
+        onSuccess: () => {
+            queryClient.invalidateQueries("singlemeetingcache");
+            queryClient.invalidateQueries("complaintscache");
+            router("/meetings")
+        }
     });
     useEffect(() => {
         const newComps:CompsCheckedState = {compsChecked:[]};
@@ -74,10 +78,18 @@ export function MeetingPage(){
         if(comp.complaint_id!>0)createMutation.mutate(comp!);
     }
 
+    // function removeComplaintFromMeeting(comp:Complaint){
+
+    // }
+    // //mdata is meeting to delete send complaints to removeComplaintfromMeeting() before deleting
+    // function deleteMeeting(){
+
+    // }
+
     function removeComplaint(index:number){
         const compCheck:CompState = comps.compsChecked.find(c=>c.id===index)!;
         if(compCheck)compCheck!.checked = !compCheck?.checked;
-        const complaint:Complaint = cdata.find(cp=>cp.complaint_id===index)!;
+        const complaint:Complaint = cdata.find(cp=>cp.complaint_id===index)!;//cdata is complaint cache
         complaint.meeting_id = -1;
         createMutation.mutate(complaint);
     }
@@ -122,8 +134,9 @@ export function MeetingPage(){
                         selections: choices
                     }}  selectCallBack={updateState} />]:[<p>{c.status}</p>])]}/>)}
         </div>
+        
         <div>
-            <PageHeader text={"Complaints"} size={38}/>
+            {(user.role==="COUNCIL")&& <PageHeader text={"Complaints"} size={38}/>}
             {(user.role==="COUNCIL")&&comps.compsChecked.map((c,i)=><Checkbox 
                 key={`comp-${i}`} 
                 isChecked={c.checked} 
@@ -131,7 +144,8 @@ export function MeetingPage(){
                 checkHandler={()=>{updateCheckStatus(c.id)}} 
                 index={c.id}/>)
             }
-        </div>    
+        </div>   
+               
     </div>
     </>
 }
