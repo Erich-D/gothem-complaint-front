@@ -49,7 +49,7 @@ export function ComplaintsPage(){
         {text:"Meetings",callback:()=>{router("/meetings")}}]} />
         <PageHeader text={"Complaints"} size={72}/>
         <div style={{display:"flex", flexWrap:"wrap"}}>
-            {data.map((m,i)=><LinkImage link={m.meeting_id! > 0 ? "/meetings/"+m.meeting_id:""} 
+            {data.map((m,i)=><LinkImage key={"link"+i} link={m.meeting_id! > 0 ? "/meetings/"+m.meeting_id:""} 
             url={scroll} 
             alt={"No Image"} 
             foot={[...((m.meeting_id! > 0)?[<p>Meeting assigned</p>]:[]),<p style={{fontSize:"20px"}}><strong>Complaint:</strong></p>,

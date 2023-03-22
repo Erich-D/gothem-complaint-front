@@ -30,7 +30,7 @@ export function CreateMeetingPage(){
     //set state for checkboxes
     const [comps, setComps] = useState(initState)
     //get complaints from database
-    const {isLoading, isError, isSuccess, data = []} = useQuery("complaintscache", getAllComplaints);
+    const {isLoading, isError, data = []} = useQuery("complaintscache", getAllComplaints);
     useEffect(() => {
         const newComps:CompsCheckedState = {compsChecked:[]};
         data.map(c=>{(c.meeting_id!<0)&&newComps.compsChecked.push({id:c.complaint_id??0,checked:false,about:` ${c.description}   Status: ${c.status}`})})
@@ -45,7 +45,7 @@ export function CreateMeetingPage(){
             comps.compsChecked.forEach(c=>{
                 const comp:Complaint = data.find(cp=>cp.complaint_id===c.id&&c.checked)??JSON.parse(EmptyComplaint);
                 comp.meeting_id = rdata.meeting_id;
-                if(comp.complaint_id!>0)complaintMutation.mutate(comp!);
+                if(comp.complaint_id!>0)complaintMutation.mutate(comp);
             });
             router("/meetings")
         } 
@@ -67,8 +67,8 @@ export function CreateMeetingPage(){
     function updateCheckStatus(index:number){
         console.log(index)
         const newComps:CompsCheckedState = JSON.parse(JSON.stringify(comps));
-        newComps.compsChecked.map((c, currentIndex) =>
-          currentIndex === index ? c.checked=!c.checked:c
+        newComps.compsChecked.forEach((c, currentIndex) =>
+          {if(currentIndex === index) c.checked=!c.checked}
         )
         console.log(newComps)
         setComps(newComps)
@@ -82,7 +82,7 @@ export function CreateMeetingPage(){
             <Form def={formMeetingDef} initState={MeetingInitState} handler={createMeeting} buttonText={"Submit"}/>
         </div>
         <div style={{display:"flex",flexDirection:'column',justifyContent:"center",alignItems:"center"}}>
-        {comps.compsChecked.map((c,i)=><Checkbox key={`comp-${i}`} isChecked={c.checked} label={c.about} checkHandler={()=>{updateCheckStatus(i)}} index={i}/>)}
+        {comps.compsChecked.map((c,i)=><Checkbox key={`comp-${c.id}`} isChecked={c.checked} label={c.about} checkHandler={()=>{updateCheckStatus(i)}} index={i}/>)}
         </div>
     </>
 }

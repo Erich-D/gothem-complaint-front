@@ -10,7 +10,6 @@ import { setUser } from "../utils/helpers";
 
 export function LoginPage(){
     const router = useNavigate();
-    const queryClient = useQueryClient();
     const loginMutation = useMutation(loginUser, {
         onSuccess: (data) => {
             setUser(data)

@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getMonthDay, getTime, getUser, removeUser } from "../utils/helpers";
 import { getAllComplaints, getMeeting, updateComplaint, updateMeeting, deleteMeeting } from "../api/request";
 import { StrongPar } from "../components/strong-par";
-import { AppUser, Complaint, EmptyComplaint, formMeetingDef, formUpdateMeetingDef, Meeting, MeetingForm } from "../api/types";
+import { AppUser, Complaint, EmptyComplaint, formUpdateMeetingDef, Meeting, MeetingForm } from "../api/types";
 import { Form } from "../components/form-comp";
 import { RadioSelect } from "../components/radio-select";
 import { useEffect, useState } from "react";
@@ -106,7 +106,7 @@ export function MeetingPage(){
     }
 
     function getMeetingFormState(m:Meeting){
-        const t:string = new Date(m.time).toISOString();
+        const t:string = new Date(m.time*1000).toISOString();
         const result:MeetingForm = {meeting_id:m.meeting_id,address:m.address,summary:m.summary,time:t.substring(0,t.lastIndexOf(":"))}
         return result
     }

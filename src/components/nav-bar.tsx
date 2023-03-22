@@ -30,10 +30,10 @@ export function NavBar(props:NavBarProps){
     return<>
         <div style={{...myStyle.bar}}>
             <div style={{marginLeft:"15px",  marginTop:"5px", marginBottom:"5px",display:"flex"}}>
-                {props.left.map(b=><NavButton text={b.text} callback={b.callback}/>)}
+                {props.left.map(b=><NavButton key={"lnb"+b.text} text={b.text} callback={b.callback}/>)}
             </div>
             <div style={{marginRight:"15px",  marginTop:"5px", marginBottom:"5px",display:"flex"}}>
-                {props.right.map(b=><NavButton text={b.text} callback={b.callback}/>)}
+                {props.right.map(b=><NavButton key={"rnb"+b.text} text={b.text} callback={b.callback}/>)}
             </div>
         </div>
     </>
