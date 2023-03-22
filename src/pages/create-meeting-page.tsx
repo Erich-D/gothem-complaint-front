@@ -60,7 +60,7 @@ export function CreateMeetingPage(){
 
     function createMeeting(form:MeetingForm){
         const date = new Date(form.time);
-        const ms = Date.UTC(date.getFullYear(),date.getMonth(),date.getDay(),date.getHours(),date.getMinutes())/1000
+        const ms = Date.UTC(date.getFullYear(),date.getMonth(),date.getDate(),date.getHours(),date.getMinutes())/1000
         const meeting:Meeting = {address:form.address, summary:form.summary, time:ms, complaints:[]}
         meetingMutation.mutate(meeting);
     }

@@ -65,7 +65,7 @@ export function MeetingPage(){
 
     function updatedMeeting(form:MeetingForm){
         const date = new Date(form.time);
-        const ms = Date.UTC(date.getFullYear(),date.getMonth(),date.getDay(),date.getHours(),date.getMinutes())/1000
+        const ms = Date.UTC(date.getFullYear(),date.getMonth(),date.getDate(),date.getHours(),date.getMinutes())/1000;
         const meeting:Meeting = {meeting_id:form.meeting_id, address:form.address, summary:form.summary, time:ms, complaints:[]}
         meetingMutation.mutate(meeting)
     }
