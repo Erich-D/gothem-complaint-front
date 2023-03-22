@@ -50,7 +50,7 @@ export const EmptyComplaint:string=`{
     "complaint_id":-1,
     "description":"",
     "status":"",
-    "meeting":""
+    "meeting_id":""
 }`
 
 export type MeetingForm={

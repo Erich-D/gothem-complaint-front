@@ -1,6 +1,6 @@
 import { AppUser, Complaint, Login, Meeting } from "./types";
 
-const url:string = "http://54.183.212.88:8080"
+const url:string = "http://127.0.0.1:8080"       //"http://54.183.212.88:8080"
 
 export async function getAllMeetings():Promise<Meeting[]> {
     const httpResponse = await fetch(url+"/meetings");
@@ -36,6 +36,14 @@ export async function insertComplaint(params:Complaint):Promise<Complaint> {
     });
     const complaint: Complaint = await httpResponse.json();
     return complaint;
+}
+
+export async function deleteMeeting(params:number):Promise<boolean>{
+    const httpResponse = await fetch(url+"/meetings/"+params,{
+        method:"DELETE"
+    });
+    const success = await httpResponse.json();
+    return success;
 }
 
 export async function getMeeting(params:number):Promise<Meeting> {

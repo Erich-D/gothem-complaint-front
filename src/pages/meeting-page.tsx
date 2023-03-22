@@ -5,7 +5,7 @@ import { PageHeader } from "../components/page-header";
 import scroll from "../assets/Scroll-PNG-Clipart.png"
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getMonthDay, getTime, getUser, removeUser } from "../utils/helpers";
-import { getAllComplaints, getMeeting, updateComplaint, updateMeeting } from "../api/request";
+import { getAllComplaints, getMeeting, updateComplaint, updateMeeting, deleteMeeting } from "../api/request";
 import { StrongPar } from "../components/strong-par";
 import { AppUser, Complaint, EmptyComplaint, formMeetingDef, formUpdateMeetingDef, Meeting, MeetingForm } from "../api/types";
 import { Form } from "../components/form-comp";
@@ -43,6 +43,13 @@ export function MeetingPage(){
             router("/meetings")
         }
     });
+    const deleteMutation = useMutation(deleteMeeting, {
+        onSuccess: () => {
+            queryClient.invalidateQueries("singlemeetingcache");
+            queryClient.invalidateQueries("complaintscache");
+            router("/meetings");
+        } 
+    });
     useEffect(() => {
         const newComps:CompsCheckedState = {compsChecked:[]};
         cdata.map(c=>{(c.meeting_id!<0)&&newComps.compsChecked.push({id:c.complaint_id??0,checked:false,about:` ${c.description}   Status: ${c.status}`})})
@@ -78,13 +85,17 @@ export function MeetingPage(){
         if(comp.complaint_id!>0)createMutation.mutate(comp!);
     }
 
-    // function removeComplaintFromMeeting(comp:Complaint){
-
-    // }
-    // //mdata is meeting to delete send complaints to removeComplaintfromMeeting() before deleting
-    // function deleteMeeting(){
-
-    // }
+    function removeComplaintFromMeeting(comp:Complaint){
+        comp.meeting_id = -1;
+        createMutation.mutate(comp);
+    }
+    //mdata is meeting to delete send complaints to removeComplaintfromMeeting() before deleting
+    function deleteCurrentMeeting(){
+        for(let complaint of mdata!.complaints){
+            removeComplaintFromMeeting(complaint)
+        }
+        deleteMutation.mutate(mdata!.meeting_id!)
+    }
 
     function removeComplaint(index:number){
         const compCheck:CompState = comps.compsChecked.find(c=>c.id===index)!;
@@ -111,7 +122,10 @@ export function MeetingPage(){
         url={scroll} 
         alt={"oops no pic"} 
         width={700} 
-        foot={(user.role==="COUNCIL")?[<Form def={formUpdateMeetingDef} initState={JSON.stringify(getMeetingFormState(mdata!))} handler={updatedMeeting} buttonText={"Submit"}/>]:[
+        foot={(user.role==="COUNCIL")?[<Checkbox isChecked={false} label={"Delete Meeting"} checkHandler={deleteCurrentMeeting} index={0}/>,
+            <Form def={formUpdateMeetingDef} initState={JSON.stringify(getMeetingFormState(mdata!))} 
+            handler={updatedMeeting} buttonText={"Submit"}
+            />]:[
             <StrongPar size={20} text={"Meeting:"}/>,
             <p>{mdata?.summary}</p>,
             <StrongPar size={20} text={"Set for:"}/>,
