@@ -1,6 +1,6 @@
 import { AppUser, Complaint, Login, Meeting } from "./types";
 
-const url:string = "http://54.183.212.88:8080"
+const url:string =  "http://192.168.0.124:8080"  //"http://54.183.212.88:8080"
 
 export async function getAllMeetings():Promise<Meeting[]> {
     const httpResponse = await fetch(url+"/meetings");
